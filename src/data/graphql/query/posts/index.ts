@@ -3,7 +3,7 @@ import {
   PostsQuery,
   PostsQueryVariables,
   PostsQueryResult,
-} from './posts.query';
+} from './posts.query.gql';
 import { useQuery } from '@apollo/client';
 
 export const usePostsQuery = (): PostsQueryResult => {

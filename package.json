@@ -8,7 +8,7 @@
     "start": "next start -p 4000",
     "test": "cypress open",
     "codegen": "graphql-codegen --config codegen.yml",
-    "instrospection": "graphql-codegen --config introspection.codegen.yml"
+    "introspection": "graphql-codegen --config introspection.codegen.yml"
   },
   "dependencies": {
     "@apollo/client": "^3.4.10",

@@ -3,6 +3,4 @@ schema: 'https://serene-woodland-54282.herokuapp.com/graphql'
 generates:
   src/data/graphql/schema.json:
     plugins:
-      - add:
-          content: '/* eslint-disable */'
       - introspection
