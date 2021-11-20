@@ -5,12 +5,12 @@ import { gql } from '@apollo/client';
 import { BaseUserFragmentDoc } from '../../fragment/base-user/base-user.fragment.gql';
 import * as Apollo from '@apollo/client';
 export type CreateUserMutationVariables = Types.Exact<{
-  data: Types.SignupInput;
+  createUserInput: Types.CreateUserInput;
 }>;
 
 export type CreateUserMutation = {
   __typename?: 'Mutation';
-  create: {
+  createUser: {
     __typename?: 'UserResponse';
     bio?: string | null | undefined;
     createdAt: string;
@@ -22,8 +22,8 @@ export type CreateUserMutation = {
 };
 
 export const CreateUserDocument = gql`
-  mutation CreateUser($data: SignupInput!) {
-    create(data: $data) {
+  mutation CreateUser($createUserInput: CreateUserInput!) {
+    createUser(createUserInput: $createUserInput) {
       ...BaseUser
     }
   }

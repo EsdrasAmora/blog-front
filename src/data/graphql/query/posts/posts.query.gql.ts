@@ -3,6 +3,7 @@ import * as Types from '../../../../types.gql';
 
 import { gql } from '@apollo/client';
 import { BasePostFragmentDoc } from '../../fragment/base-post/base-post.fragment.gql';
+import { BaseUserFragmentDoc } from '../../fragment/base-user/base-user.fragment.gql';
 import * as Apollo from '@apollo/client';
 export type PostsQueryVariables = Types.Exact<{
   data: Types.PostConnectionInput;
@@ -18,7 +19,6 @@ export type PostsQuery = {
           cursor: string;
           node: {
             __typename?: 'Post';
-            authorId: string;
             claps: number;
             content: string;
             createdAt: string;
@@ -26,6 +26,15 @@ export type PostsQuery = {
             published: boolean;
             title: string;
             updatedAt: string;
+            author: {
+              __typename?: 'UserResponse';
+              bio?: string | null | undefined;
+              createdAt: string;
+              email: string;
+              name: string;
+              updatedAt: string;
+              userId: string;
+            };
           };
         }>
       | null
@@ -46,6 +55,9 @@ export const PostsDocument = gql`
       edges {
         node {
           ...BasePost
+          author {
+            ...BaseUser
+          }
         }
         cursor
       }
@@ -58,6 +70,7 @@ export const PostsDocument = gql`
     }
   }
   ${BasePostFragmentDoc}
+  ${BaseUserFragmentDoc}
 `;
 export type PostsQueryResult = Apollo.QueryResult<
   PostsQuery,

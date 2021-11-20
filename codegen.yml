@@ -1,12 +1,12 @@
 overwrite: true
 schema: 'src/data/graphql/schema.json'
-documents: 'src/**/*.gql'
+documents: 'src/**/*.graphql'
 config:
   scalars:
     DateTime: string
 hooks:
   afterAllFileWrite:
-    - prettier --write *.gql.ts
+    - prettier --write src/**/*.gql.ts
 generates:
   src/types.gql.ts:
     config:

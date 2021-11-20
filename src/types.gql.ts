@@ -36,23 +36,23 @@ export type LoginResponseFieldPolicy = {
   user?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type MutationKeySpecifier = (
-  | 'create'
   | 'createPost'
   | 'createUser'
   | 'login'
   | 'removePost'
   | 'removeUser'
+  | 'signup'
   | 'updatePost'
   | 'updateUser'
   | MutationKeySpecifier
 )[];
 export type MutationFieldPolicy = {
-  create?: FieldPolicy<any> | FieldReadFunction<any>;
   createPost?: FieldPolicy<any> | FieldReadFunction<any>;
   createUser?: FieldPolicy<any> | FieldReadFunction<any>;
   login?: FieldPolicy<any> | FieldReadFunction<any>;
   removePost?: FieldPolicy<any> | FieldReadFunction<any>;
   removeUser?: FieldPolicy<any> | FieldReadFunction<any>;
+  signup?: FieldPolicy<any> | FieldReadFunction<any>;
   updatePost?: FieldPolicy<any> | FieldReadFunction<any>;
   updateUser?: FieldPolicy<any> | FieldReadFunction<any>;
 };
@@ -70,7 +70,7 @@ export type PageInfoFieldPolicy = {
   startCursor?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type PostKeySpecifier = (
-  | 'authorId'
+  | 'author'
   | 'claps'
   | 'content'
   | 'createdAt'
@@ -81,7 +81,7 @@ export type PostKeySpecifier = (
   | PostKeySpecifier
 )[];
 export type PostFieldPolicy = {
-  authorId?: FieldPolicy<any> | FieldReadFunction<any>;
+  author?: FieldPolicy<any> | FieldReadFunction<any>;
   claps?: FieldPolicy<any> | FieldReadFunction<any>;
   content?: FieldPolicy<any> | FieldReadFunction<any>;
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -109,14 +109,12 @@ export type PostResponseEdgeFieldPolicy = {
   node?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type QueryKeySpecifier = (
-  | 'hello'
   | 'post'
   | 'posts'
   | 'user'
   | QueryKeySpecifier
 )[];
 export type QueryFieldPolicy = {
-  hello?: FieldPolicy<any> | FieldReadFunction<any>;
   post?: FieldPolicy<any> | FieldReadFunction<any>;
   posts?: FieldPolicy<any> | FieldReadFunction<any>;
   user?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -201,6 +199,7 @@ export const namedOperations = {
   Mutation: {
     CreateUser: 'CreateUser' as const,
     Login: 'Login' as const,
+    SignUp: 'SignUp' as const,
   },
   Fragment: {
     BasePost: 'BasePost' as const,
@@ -231,7 +230,6 @@ export type CreatePostInput = {
 };
 
 export type CreateUserInput = {
-  /** Example field (placeholder) */
   exampleField: Scalars['Int'];
 };
 
@@ -249,18 +247,14 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  create: UserResponse;
   createPost: Post;
   createUser: UserResponse;
   login: LoginResponse;
   removePost: Post;
   removeUser: UserResponse;
+  signup: UserResponse;
   updatePost: Post;
   updateUser: UserResponse;
-};
-
-export type MutationCreateArgs = {
-  data: SignupInput;
 };
 
 export type MutationCreatePostArgs = {
@@ -276,15 +270,19 @@ export type MutationLoginArgs = {
 };
 
 export type MutationRemovePostArgs = {
-  postId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type MutationRemoveUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Float'];
+};
+
+export type MutationSignupArgs = {
+  data: SignupInput;
 };
 
 export type MutationUpdatePostArgs = {
-  updatePostInput: UpdatePostInput;
+  id: UpdatePostInput;
 };
 
 export type MutationUpdateUserArgs = {
@@ -301,7 +299,7 @@ export type PageInfo = {
 
 export type Post = {
   __typename?: 'Post';
-  authorId: Scalars['ID'];
+  author: UserResponse;
   claps: Scalars['Int'];
   content: Scalars['String'];
   createdAt: Scalars['DateTime'];
@@ -329,14 +327,13 @@ export type PostResponseEdge = {
 
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
   post: Post;
   posts: PostConnection;
   user: UserResponse;
 };
 
 export type QueryPostArgs = {
-  postId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type QueryPostsArgs = {
@@ -344,7 +341,7 @@ export type QueryPostsArgs = {
 };
 
 export type QueryUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Float'];
 };
 
 export type SignupInput = {
@@ -362,7 +359,6 @@ export type UpdatePostInput = {
 };
 
 export type UpdateUserInput = {
-  /** Example field (placeholder) */
   exampleField?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
 };

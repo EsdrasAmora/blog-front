@@ -4,7 +4,7 @@ import { AppProps } from 'next/app';
 import { Provider } from 'next-auth/client';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { Layout } from '../components/layout';
-import { StrictTypedTypePolicies } from '../types';
+import { StrictTypedTypePolicies } from '../types.gql';
 import 'tailwindcss/tailwind.css';
 
 export const Token =

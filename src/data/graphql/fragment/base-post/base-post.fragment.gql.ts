@@ -4,7 +4,6 @@ import * as Types from '../../../../types.gql';
 import { gql } from '@apollo/client';
 export type BasePostFragment = {
   __typename?: 'Post';
-  authorId: string;
   claps: number;
   content: string;
   createdAt: string;
@@ -16,7 +15,6 @@ export type BasePostFragment = {
 
 export const BasePostFragmentDoc = gql`
   fragment BasePost on Post {
-    authorId
     claps
     content
     createdAt

@@ -1,5 +1,4 @@
 fragment BasePost on Post {
-  authorId
   claps
   content
   createdAt
