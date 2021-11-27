@@ -19,21 +19,21 @@ export type PostsQuery = {
           cursor: string;
           node: {
             __typename?: 'Post';
+            id: string;
             claps: number;
             content: string;
             createdAt: string;
-            postId: string;
             published: boolean;
             title: string;
             updatedAt: string;
             author: {
-              __typename?: 'UserResponse';
+              __typename?: 'User';
+              id: string;
               bio?: string | null | undefined;
               createdAt: string;
               email: string;
               name: string;
               updatedAt: string;
-              userId: string;
             };
           };
         }>

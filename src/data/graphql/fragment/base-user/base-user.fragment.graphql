@@ -1,8 +1,8 @@
-fragment BaseUser on UserResponse {
+fragment BaseUser on User {
+  id
   bio
   createdAt
   email
   name
   updatedAt
-  userId
 }

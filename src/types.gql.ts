@@ -6,6 +6,7 @@ import {
   TypePolicy,
 } from '@apollo/client/cache';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
@@ -26,6 +27,25 @@ const result: PossibleTypesResultData = {
 };
 export default result;
 
+export type CommentKeySpecifier = (
+  | 'author'
+  | 'authorId'
+  | 'createdAt'
+  | 'description'
+  | 'id'
+  | 'postId'
+  | 'updatedAt'
+  | CommentKeySpecifier
+)[];
+export type CommentFieldPolicy = {
+  author?: FieldPolicy<any> | FieldReadFunction<any>;
+  authorId?: FieldPolicy<any> | FieldReadFunction<any>;
+  createdAt?: FieldPolicy<any> | FieldReadFunction<any>;
+  description?: FieldPolicy<any> | FieldReadFunction<any>;
+  id?: FieldPolicy<any> | FieldReadFunction<any>;
+  postId?: FieldPolicy<any> | FieldReadFunction<any>;
+  updatedAt?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type LoginResponseKeySpecifier = (
   | 'accessToken'
   | 'user'
@@ -37,10 +57,9 @@ export type LoginResponseFieldPolicy = {
 };
 export type MutationKeySpecifier = (
   | 'createPost'
-  | 'createUser'
+  | 'deleteUser'
   | 'login'
   | 'removePost'
-  | 'removeUser'
   | 'signup'
   | 'updatePost'
   | 'updateUser'
@@ -48,10 +67,9 @@ export type MutationKeySpecifier = (
 )[];
 export type MutationFieldPolicy = {
   createPost?: FieldPolicy<any> | FieldReadFunction<any>;
-  createUser?: FieldPolicy<any> | FieldReadFunction<any>;
+  deleteUser?: FieldPolicy<any> | FieldReadFunction<any>;
   login?: FieldPolicy<any> | FieldReadFunction<any>;
   removePost?: FieldPolicy<any> | FieldReadFunction<any>;
-  removeUser?: FieldPolicy<any> | FieldReadFunction<any>;
   signup?: FieldPolicy<any> | FieldReadFunction<any>;
   updatePost?: FieldPolicy<any> | FieldReadFunction<any>;
   updateUser?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -74,7 +92,7 @@ export type PostKeySpecifier = (
   | 'claps'
   | 'content'
   | 'createdAt'
-  | 'postId'
+  | 'id'
   | 'published'
   | 'title'
   | 'updatedAt'
@@ -85,7 +103,7 @@ export type PostFieldPolicy = {
   claps?: FieldPolicy<any> | FieldReadFunction<any>;
   content?: FieldPolicy<any> | FieldReadFunction<any>;
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>;
-  postId?: FieldPolicy<any> | FieldReadFunction<any>;
+  id?: FieldPolicy<any> | FieldReadFunction<any>;
   published?: FieldPolicy<any> | FieldReadFunction<any>;
   title?: FieldPolicy<any> | FieldReadFunction<any>;
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -109,34 +127,43 @@ export type PostResponseEdgeFieldPolicy = {
   node?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type QueryKeySpecifier = (
+  | 'comment'
   | 'post'
   | 'posts'
-  | 'user'
   | QueryKeySpecifier
 )[];
 export type QueryFieldPolicy = {
+  comment?: FieldPolicy<any> | FieldReadFunction<any>;
   post?: FieldPolicy<any> | FieldReadFunction<any>;
   posts?: FieldPolicy<any> | FieldReadFunction<any>;
-  user?: FieldPolicy<any> | FieldReadFunction<any>;
 };
-export type UserResponseKeySpecifier = (
+export type UserKeySpecifier = (
   | 'bio'
   | 'createdAt'
   | 'email'
+  | 'id'
   | 'name'
+  | 'posts'
   | 'updatedAt'
-  | 'userId'
-  | UserResponseKeySpecifier
+  | UserKeySpecifier
 )[];
-export type UserResponseFieldPolicy = {
+export type UserFieldPolicy = {
   bio?: FieldPolicy<any> | FieldReadFunction<any>;
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>;
   email?: FieldPolicy<any> | FieldReadFunction<any>;
+  id?: FieldPolicy<any> | FieldReadFunction<any>;
   name?: FieldPolicy<any> | FieldReadFunction<any>;
+  posts?: FieldPolicy<any> | FieldReadFunction<any>;
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>;
-  userId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type StrictTypedTypePolicies = {
+  Comment?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | CommentKeySpecifier
+      | (() => undefined | CommentKeySpecifier);
+    fields?: CommentFieldPolicy;
+  };
   LoginResponse?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:
       | false
@@ -183,12 +210,9 @@ export type StrictTypedTypePolicies = {
       | (() => undefined | QueryKeySpecifier);
     fields?: QueryFieldPolicy;
   };
-  UserResponse?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
-    keyFields?:
-      | false
-      | UserResponseKeySpecifier
-      | (() => undefined | UserResponseKeySpecifier);
-    fields?: UserResponseFieldPolicy;
+  User?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | UserKeySpecifier | (() => undefined | UserKeySpecifier);
+    fields?: UserFieldPolicy;
   };
 };
 export type TypedTypePolicies = StrictTypedTypePolicies & TypePolicies;
@@ -197,7 +221,7 @@ export const namedOperations = {
     Posts: 'Posts' as const,
   },
   Mutation: {
-    CreateUser: 'CreateUser' as const,
+    Signup: 'Signup' as const,
     Login: 'Login' as const,
     SignUp: 'SignUp' as const,
   },
@@ -217,8 +241,19 @@ export type Scalars = {
   DateTime: string;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  author: User;
+  authorId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
 export type ConnectionInput = {
-  after?: Maybe<Scalars['String']>;
+  after?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
 };
 
@@ -227,10 +262,6 @@ export type CreatePostInput = {
   content: Scalars['String'];
   published: Scalars['Boolean'];
   title: Scalars['String'];
-};
-
-export type CreateUserInput = {
-  exampleField: Scalars['Int'];
 };
 
 export type LoginInput = {
@@ -242,27 +273,26 @@ export type LoginResponse = {
   __typename?: 'LoginResponse';
   /** user jwt access token */
   accessToken: Scalars['String'];
-  user: UserResponse;
+  user: User;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createPost: Post;
-  createUser: UserResponse;
+  deleteUser: User;
   login: LoginResponse;
-  removePost: Post;
-  removeUser: UserResponse;
-  signup: UserResponse;
-  updatePost: Post;
-  updateUser: UserResponse;
+  removePost?: Maybe<Post>;
+  signup: User;
+  updatePost?: Maybe<Post>;
+  updateUser: User;
 };
 
 export type MutationCreatePostArgs = {
   data: CreatePostInput;
 };
 
-export type MutationCreateUserArgs = {
-  createUserInput: CreateUserInput;
+export type MutationDeleteUserArgs = {
+  id: Scalars['Float'];
 };
 
 export type MutationLoginArgs = {
@@ -271,10 +301,6 @@ export type MutationLoginArgs = {
 
 export type MutationRemovePostArgs = {
   id: Scalars['String'];
-};
-
-export type MutationRemoveUserArgs = {
-  id: Scalars['Float'];
 };
 
 export type MutationSignupArgs = {
@@ -299,11 +325,11 @@ export type PageInfo = {
 
 export type Post = {
   __typename?: 'Post';
-  author: UserResponse;
+  author: User;
   claps: Scalars['Int'];
   content: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  postId: Scalars['ID'];
+  id: Scalars['ID'];
   published: Scalars['Boolean'];
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -327,9 +353,9 @@ export type PostResponseEdge = {
 
 export type Query = {
   __typename?: 'Query';
-  post: Post;
+  comment: Comment;
+  post?: Maybe<Post>;
   posts: PostConnection;
-  user: UserResponse;
 };
 
 export type QueryPostArgs = {
@@ -340,35 +366,32 @@ export type QueryPostsArgs = {
   data: PostConnectionInput;
 };
 
-export type QueryUserArgs = {
-  id: Scalars['Float'];
-};
-
 export type SignupInput = {
-  bio?: Maybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   name: Scalars['String'];
   password: Scalars['String'];
 };
 
 export type UpdatePostInput = {
+  claps: Scalars['Int'];
   content: Scalars['String'];
-  postId: Scalars['String'];
+  id: Scalars['String'];
   published: Scalars['Boolean'];
   title: Scalars['String'];
 };
 
 export type UpdateUserInput = {
-  exampleField?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
 };
 
-export type UserResponse = {
-  __typename?: 'UserResponse';
+export type User = {
+  __typename?: 'User';
   bio?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
+  id: Scalars['ID'];
   name: Scalars['String'];
+  posts: Post;
   updatedAt: Scalars['DateTime'];
-  userId: Scalars['ID'];
 };

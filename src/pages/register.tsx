@@ -2,51 +2,51 @@ import { ApolloError } from '@apollo/client';
 import { Button } from 'components/button';
 import { TextField } from 'components/text-field';
 import { TextareaField } from 'components/textarea-field';
-import { useSignUpMutation } from 'data/graphql/mutation/sign-up';
-import Router from 'next/router';
+import { useSignupMutation } from 'data/graphql/mutation/signup';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { validateEmail, validatePassword } from 'utils/field-validators';
+import { Form } from '../components/Form';
 
-export default function Login() {
+interface FormInput {
+  email: string;
+  name: string;
+  bio?: string;
+  password: string;
+}
+
+export default function SignUp() {
+  const router = useRouter();
+
   const handleCreateUserComplete = () => {
-    Router.push('/login');
+    router.push('/login');
   };
 
   const handleCreateUserError = (error: ApolloError) => {
-    alert(error.message);
+    console.log(error);
   };
 
-  const [createUser, { loading }] = useSignUpMutation(
+  const [createUser, { loading }] = useSignupMutation(
     handleCreateUserComplete,
     handleCreateUserError,
   );
 
-  const handleCreateUserSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleError: SubmitErrorHandler<FormInput> = (data) => {
+    console.log(data);
+  };
 
-    const formData = event.target as typeof event.target & {
-      email: { value: string };
-      name: { value: string };
-      bio?: { value: string };
-      password: { value: string };
-    };
-
-    const data = {
-      email: formData.email.value,
-      name: formData.name.value,
-      bio: formData.bio?.value,
-      password: formData.password.value,
-    };
-
+  const handleSuccess: SubmitHandler<FormInput> = (data) => {
     const isDataValid = validateData(data);
-
-    isDataValid && createUser({ variables: { data } });
+    if (isDataValid) {
+      createUser({ variables: { data } });
+    }
   };
 
   return (
     <div className="bg-white p-10 rounded border border-pink-900">
       <h1 className="font-bold text-2xl mb-3">Registration form</h1>
-      <form className="flex flex-col" onSubmit={handleCreateUserSubmit}>
+      <Form onSubmit={handleSuccess} onError={handleError}>
         <TextField
           label="Name"
           placeholder="Ex. John Travolta"
@@ -75,17 +75,12 @@ export default function Login() {
         />
 
         <Button loading={loading}>Register</Button>
-      </form>
+      </Form>
     </div>
   );
 }
 
-const validateData = (data: {
-  email: any;
-  name: any;
-  bio?: string | undefined;
-  password: any;
-}) => {
+const validateData = (data: FormInput) => {
   if (!validateEmail(data.email)) {
     alert('Email should be valid. Example: user@register.com');
     return false;
