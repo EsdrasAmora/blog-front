@@ -5,8 +5,8 @@ import { useLoginMutation } from 'data/graphql/mutation/login';
 import { LoginMutation } from 'data/graphql/mutation/login/login-user.mutation.gql';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
-import { Form } from '../components/Form';
+import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
+import { Form } from '../components/form';
 
 interface FormInput {
   email: string;

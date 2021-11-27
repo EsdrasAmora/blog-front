@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { validateEmail, validatePassword } from 'utils/field-validators';
-import { Form } from '../components/Form';
+import { Form } from '../components/form';
 
 interface FormInput {
   email: string;
