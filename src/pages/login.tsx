@@ -3,14 +3,22 @@ import { Button } from 'components/button';
 import { TextField } from 'components/text-field';
 import { useLoginMutation } from 'data/graphql/mutation/login';
 import { LoginMutation } from 'data/graphql/mutation/login/login-user.mutation.gql';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { Form } from '../components/Form';
+
+interface FormInput {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
+  const router = useRouter();
   const handleLoginComplete = (data: LoginMutation) => {
     sessionStorage.setItem('@auth-key', data?.login?.accessToken);
 
-    Router.push('/index');
+    router.push('/');
   };
 
   const handleLoginError = (error: ApolloError) => {
@@ -22,29 +30,23 @@ export default function Login() {
     handleLoginError,
   );
 
-  const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSuccess: SubmitHandler<FormInput> = (data) => {
+    login({ variables: { data } });
+  };
 
-    const formData = event.target as typeof event.target & {
-      userId: { value: string };
-      password: { value: string };
-    };
-
-    const email = formData.userId.value;
-    const password = formData.password.value;
-
-    login({ variables: { data: { email, password } } });
+  const handleError: SubmitErrorHandler<FormInput> = (data) => {
+    console.log(data);
   };
 
   return (
     <div className="bg-white p-10 rounded border border-pink-900">
       <h1 className="font-bold text-2xl mb-3">Login</h1>
-      <form className="flex flex-col" onSubmit={handleLoginSubmit}>
+      <Form onSubmit={handleSuccess} onError={handleError}>
         <TextField
-          label="User ID"
-          placeholder="Ex. admin"
+          label="Email"
+          placeholder="Ex. you@gmail.com"
           type="text"
-          name="userId"
+          name="email"
         />
 
         <TextField
@@ -55,7 +57,7 @@ export default function Login() {
         />
 
         <Button loading={loading}>Login</Button>
-      </form>
+      </Form>
     </div>
   );
 }

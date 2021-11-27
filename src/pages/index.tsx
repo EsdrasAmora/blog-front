@@ -1,12 +1,4 @@
-import {
-  Stack,
-  Flex,
-  Box,
-  Link,
-  Heading,
-  Button,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Link, Stack, Text } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
 import { usePostsQuery } from '../data/graphql/query/posts';
@@ -20,10 +12,10 @@ export default function Home() {
           <div>Loading ...</div>
         ) : (
           data?.posts?.edges?.map(({ cursor, node: post }) => (
-            <Flex p={5} key={post.postId} shadow="md" borderWidth="1px">
+            <Flex p={5} key={post.id} shadow="md" borderWidth="1px">
               {/* <UpdootSection post={post} /> */}
               <Box flex={1}>
-                <NextLink href="/post/[id]" as={`/post/${post.postId}`}>
+                <NextLink href="/post/[id]" as={`/post/${post.id}`}>
                   <Link>
                     <Heading fontSize="xl">{post.title}</Heading>
                   </Link>
