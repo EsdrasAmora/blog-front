@@ -1,8 +1,8 @@
 fragment BasePost on Post {
+  id
   claps
   content
   createdAt
-  postId
   published
   title
   updatedAt

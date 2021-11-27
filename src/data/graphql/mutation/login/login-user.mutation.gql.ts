@@ -14,13 +14,13 @@ export type LoginMutation = {
     __typename?: 'LoginResponse';
     accessToken: string;
     user: {
-      __typename?: 'UserResponse';
+      __typename?: 'User';
+      id: string;
       bio?: string | null | undefined;
       createdAt: string;
       email: string;
       name: string;
       updatedAt: string;
-      userId: string;
     };
   };
 };

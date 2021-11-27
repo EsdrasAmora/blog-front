@@ -4,37 +4,37 @@ import * as Types from '../../../../types.gql';
 import { gql } from '@apollo/client';
 import { BaseUserFragmentDoc } from '../../fragment/base-user/base-user.fragment.gql';
 import * as Apollo from '@apollo/client';
-export type SignUpMutationVariables = Types.Exact<{
+export type SignupMutationVariables = Types.Exact<{
   data: Types.SignupInput;
 }>;
 
-export type SignUpMutation = {
+export type SignupMutation = {
   __typename?: 'Mutation';
   signup: {
-    __typename?: 'UserResponse';
+    __typename?: 'User';
+    id: string;
     bio?: string | null | undefined;
     createdAt: string;
     email: string;
     name: string;
     updatedAt: string;
-    userId: string;
   };
 };
 
-export const SignUpDocument = gql`
-  mutation SignUp($data: SignupInput!) {
+export const SignupDocument = gql`
+  mutation Signup($data: SignupInput!) {
     signup(data: $data) {
       ...BaseUser
     }
   }
   ${BaseUserFragmentDoc}
 `;
-export type SignUpMutationFn = Apollo.MutationFunction<
-  SignUpMutation,
-  SignUpMutationVariables
+export type SignupMutationFn = Apollo.MutationFunction<
+  SignupMutation,
+  SignupMutationVariables
 >;
-export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>;
-export type SignUpMutationOptions = Apollo.BaseMutationOptions<
-  SignUpMutation,
-  SignUpMutationVariables
+export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
+export type SignupMutationOptions = Apollo.BaseMutationOptions<
+  SignupMutation,
+  SignupMutationVariables
 >;
